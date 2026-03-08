@@ -1,0 +1,14 @@
+:80 {
+  encode gzip zstd
+
+  @health path /health /ready
+  reverse_proxy @health server:3000
+
+  handle /api/* {
+    reverse_proxy server:3000
+  }
+
+  handle {
+    reverse_proxy client:80
+  }
+}

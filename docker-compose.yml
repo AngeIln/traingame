@@ -1,0 +1,96 @@
+name: traingame
+
+x-common-env: &common_env
+  APP_ENV: ${APP_ENV:-development}
+  DATABASE_URL: ${DATABASE_URL:-postgres://traingame:traingame@db:5432/traingame}
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-traingame}
+      POSTGRES_USER: ${POSTGRES_USER:-traingame}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-traingame}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-traingame} -d ${POSTGRES_DB:-traingame}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles: ["dev", "prod"]
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      <<: *common_env
+      DATABASE_WAIT_HOST: db
+      DATABASE_WAIT_PORT: 5432
+      PORT: 3000
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:3000/health || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+    profiles: ["dev", "prod"]
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+    restart: unless-stopped
+    depends_on:
+      server:
+        condition: service_healthy
+    expose:
+      - "80"
+    profiles: ["dev", "prod"]
+
+  reverse-proxy:
+    image: caddy:2.9-alpine
+    restart: unless-stopped
+    depends_on:
+      server:
+        condition: service_healthy
+      client:
+        condition: service_started
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    profiles: ["prod"]
+
+  reverse-proxy-dev:
+    image: caddy:2.9-alpine
+    restart: unless-stopped
+    depends_on:
+      server:
+        condition: service_healthy
+      client:
+        condition: service_started
+    ports:
+      - "8080:80"
+    volumes:
+      - ./deploy/caddy/Caddyfile.dev:/etc/caddy/Caddyfile:ro
+    profiles: ["dev"]
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:
