@@ -1,0 +1,21 @@
+{$DOMAIN} {
+  encode gzip zstd
+
+  @health path /health /ready
+  reverse_proxy @health server:3000
+
+  handle /api/* {
+    reverse_proxy server:3000
+  }
+
+  handle {
+    reverse_proxy client:80
+  }
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Frame-Options "DENY"
+    X-Content-Type-Options "nosniff"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
+}
