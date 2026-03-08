@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrainGame - Ops Console</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>TrainGame · Centre de Contrôle</h1>
+      <p>Pilotage financier, flotte, équipes et maintenance.</p>
+    </header>
+
+    <main>
+      <section class="panel" id="cfo-dashboard">
+        <h2>Tableau de bord CFO</h2>
+        <div class="kpi-grid">
+          <article>
+            <h3>Cashflow net</h3>
+            <p id="cashflow-kpi" class="kpi"></p>
+          </article>
+          <article>
+            <h3>Marge opérationnelle</h3>
+            <p id="margin-kpi" class="kpi"></p>
+          </article>
+          <article>
+            <h3>Dette totale</h3>
+            <p id="debt-kpi" class="kpi"></p>
+          </article>
+        </div>
+        <div>
+          <h3>Historique P&L (4 périodes)</h3>
+          <ul id="pl-history" class="compact-list"></ul>
+        </div>
+      </section>
+
+      <section class="panel" id="fleet-screen">
+        <h2>Écran flotte</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Train</th>
+              <th>Type</th>
+              <th>État</th>
+              <th>Ligne</th>
+              <th>Capacité</th>
+            </tr>
+          </thead>
+          <tbody id="fleet-table-body"></tbody>
+        </table>
+      </section>
+
+      <section class="panel" id="alerts">
+        <h2>Alertes prioritaires</h2>
+        <ul id="priority-alerts"></ul>
+      </section>
+
+      <section class="panel" id="staff-overview">
+        <h2>Équipes & planification</h2>
+        <ul id="staff-list" class="compact-list"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
