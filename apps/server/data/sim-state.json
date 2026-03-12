@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "tick": 0,
+    "running": false,
+    "lastSnapshotTick": 0,
+    "incidentProbabilities": {
+      "trainBreakdown": 0.03,
+      "congestion": 0.05,
+      "weather": 0.02
+    },
+    "economyConfig": {
+      "dieselCostPerTrainTick": 110,
+      "electricCostPerTrainTick": 70,
+      "debtRepaymentPerTick": 500
+    }
+  },
+  "finance": {
+    "cash": 10000000,
+    "debt": 2000000,
+    "revenueTickets": 0,
+    "revenueCargo": 0,
+    "expensesSalaries": 0,
+    "expensesEnergy": 0,
+    "expensesMaintenance": 0,
+    "expensesDebt": 0
+  },
+  "entities": {
+    "cities": [
+      {
+        "id": "city_paris",
+        "name": "Paris",
+        "population": 2100000,
+        "passengerDemand": 1.2,
+        "cargoDemand": 1.1
+      },
+      {
+        "id": "city_lyon",
+        "name": "Lyon",
+        "population": 522000,
+        "passengerDemand": 1,
+        "cargoDemand": 1
+      },
+      {
+        "id": "city_marseille",
+        "name": "Marseille",
+        "population": 870000,
+        "passengerDemand": 1.1,
+        "cargoDemand": 1.3
+      }
+    ],
+    "stations": [
+      {
+        "id": "station_paris",
+        "cityId": "city_paris",
+        "name": "Paris Centre",
+        "platformCapacity": 2
+      },
+      {
+        "id": "station_lyon",
+        "cityId": "city_lyon",
+        "name": "Lyon Part-Dieu",
+        "platformCapacity": 2
+      },
+      {
+        "id": "station_marseille",
+        "cityId": "city_marseille",
+        "name": "Marseille St-Charles",
+        "platformCapacity": 2
+      }
+    ],
+    "trackSegments": [
+      {
+        "id": "track_pl",
+        "fromStationId": "station_paris",
+        "toStationId": "station_lyon",
+        "distanceKm": 465,
+        "maxTrains": 2,
+        "electrified": true
+      },
+      {
+        "id": "track_lm",
+        "fromStationId": "station_lyon",
+        "toStationId": "station_marseille",
+        "distanceKm": 315,
+        "maxTrains": 2,
+        "electrified": true
+      }
+    ],
+    "trains": [],
+    "lines": [],
+    "cargoContracts": [
+      {
+        "id": "contract_food_1",
+        "fromCityId": "city_lyon",
+        "toCityId": "city_marseille",
+        "tonsPerTick": 40,
+        "pricePerTon": 50,
+        "priority": 2,
+        "active": true
+      }
+    ]
+  },
+  "demand": {
+    "passengerByCityPair": {},
+    "cargoByCityPair": {}
+  },
+  "incidents": []
+}
